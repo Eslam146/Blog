@@ -4,6 +4,7 @@ import "../entity"
 type VideoService interface {
 	Save(entity.Video ) error
 	FindAll() []entity.Video
+	FindByAuthor(authorName string) entity.Video
 }
 
 type videoService struct {
@@ -22,4 +23,14 @@ func ( service *videoService) Save (video entity.Video ) error{
 
 func (service *videoService )FindAll() []entity.Video{
 	return service.videos
+}
+
+func (service *videoService )FindByAuthor(authorName string) entity.Video{
+
+	for _, v := range service.videos {
+		if v.Author.FirstName == authorName {
+			return v
+		}
+	}
+	return entity.Video{}
 }

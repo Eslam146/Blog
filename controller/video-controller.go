@@ -7,6 +7,7 @@ import (
 type VideoController interface {
 	Save(ctx *gin.Context ) error
 	FindAll() []entity.Video
+	FindByAuthor(authorName string) entity.Video
 }
 
 type controller struct {
@@ -29,4 +30,7 @@ func (c *controller )Save(ctx *gin.Context ) error{
 
 func (c *controller) FindAll() []entity.Video{
 	return c.service.FindAll()
+}
+func  (c *controller) FindByAuthor(authorName string) entity.Video{
+	return c.service.FindByAuthor(authorName)
 }

@@ -17,6 +17,12 @@ func main() {
 	router.GET("/videos", func(ctx *gin.Context) {
 		ctx.JSON(200,videoController.FindAll())
 	})
+
+	router.GET("/videos/:autherName", func(ctx *gin.Context) {
+		autherName := ctx.Param("autherName")
+		ctx.JSON(http.StatusOK, videoController.FindByAuthor(autherName) )
+	})
+
 	router.POST("/videos", func(ctx *gin.Context) {
 		err := videoController.Save(ctx)
 		if err != nil{
@@ -25,5 +31,7 @@ func main() {
 			ctx.JSON(http.StatusOK, gin.H{"message": "Input is Valid!"})
 		}
 	})
+
+
 	router.Run(":8080")
 }
