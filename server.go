@@ -3,16 +3,27 @@ package main
 
 import (
 	"./controller"
+	"./middlewares"
 	"./service"
 	"github.com/gin-gonic/gin"
+	"io"
 	"net/http"
+	"os"
 )
 var(
 	videoService service.VideoService = service.New()
 	videoController controller.VideoController = controller.New(videoService)
 )
+
+func setupLogOutput()  {
+	f, _ := os.Create("gin.log")
+	gin.DefaultWriter = io.MultiWriter(f , os.Stdout)
+}
+
 func main() {
-	router := gin.Default()
+	setupLogOutput()
+	router := gin.New()
+	router.Use(gin.Recovery() , middlewares.Logger() , middlewares.BasicAuth())
 
 	router.GET("/videos", func(ctx *gin.Context) {
 		ctx.JSON(200,videoController.FindAll())
@@ -42,7 +53,6 @@ func main() {
 		videoController.Delete(id)
 		ctx.JSON(http.StatusOK , "item has been removed")
 	})
-
 
 	router.Run(":8080")
 }
