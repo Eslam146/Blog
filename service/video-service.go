@@ -1,10 +1,15 @@
 package service
-import "../entity"
+
+import (
+	"../entity"
+)
 
 type VideoService interface {
 	Save(entity.Video ) error
 	FindAll() []entity.Video
 	FindByAuthor(authorName string) entity.Video
+	FindById(id string) entity.Video
+	Delete(id string)
 }
 
 type videoService struct {
@@ -26,11 +31,32 @@ func (service *videoService )FindAll() []entity.Video{
 }
 
 func (service *videoService )FindByAuthor(authorName string) entity.Video{
-
 	for _, v := range service.videos {
 		if v.Author.FirstName == authorName {
 			return v
 		}
 	}
 	return entity.Video{}
+}
+
+
+func (service *videoService )FindById(id string) entity.Video{
+	for _, v := range service.videos {
+		if v.Id == id {
+			return v
+		}
+	}
+	return entity.Video{}
+}
+
+
+func (service *videoService )Delete(id string) {
+	var currentVideos []entity.Video
+	for _, v := range service.videos {
+		if v.Id == id {
+			continue
+		}
+		currentVideos = append(currentVideos, v)
+	}
+	service.videos = currentVideos
 }

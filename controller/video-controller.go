@@ -8,6 +8,9 @@ type VideoController interface {
 	Save(ctx *gin.Context ) error
 	FindAll() []entity.Video
 	FindByAuthor(authorName string) entity.Video
+	FindById(id string) entity.Video
+	Delete(id string)
+
 }
 
 type controller struct {
@@ -33,4 +36,12 @@ func (c *controller) FindAll() []entity.Video{
 }
 func  (c *controller) FindByAuthor(authorName string) entity.Video{
 	return c.service.FindByAuthor(authorName)
+}
+
+func  (c *controller) FindById(id string)  entity.Video{
+	return c.service.FindById(id)
+}
+
+func  (c *controller) Delete(id string) {
+	 c.service.Delete(id)
 }
