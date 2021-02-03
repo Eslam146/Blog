@@ -1,16 +1,16 @@
 package controller
+
 import (
-	 "../entity"
-	 "../service"
-	 "github.com/gin-gonic/gin"
+	"../entity"
+	"../service"
+	"github.com/gin-gonic/gin"
+	"strconv"
 )
 type VideoController interface {
 	Save(ctx *gin.Context ) error
 	FindAll() []entity.Video
-	FindByAuthor(authorName string) entity.Video
-	FindById(id string) entity.Video
-	Delete(id string)
-
+	Update(ctx *gin.Context) error
+	Delete(ctx *gin.Context) error
 }
 
 type controller struct {
@@ -34,14 +34,27 @@ func (c *controller )Save(ctx *gin.Context ) error{
 func (c *controller) FindAll() []entity.Video{
 	return c.service.FindAll()
 }
-func  (c *controller) FindByAuthor(authorName string) entity.Video{
-	return c.service.FindByAuthor(authorName)
+
+func  (c *controller) Delete(ctx *gin.Context) error {
+	var video entity.Video
+	err := ctx.ShouldBindJSON(&video)
+	if err != nil{
+		return err
+	}
+	id, err := strconv.ParseUint(ctx.Param("id"),0,0)
+	video.ID = id
+	c.service.Delete(video)
+	return nil
 }
 
-func  (c *controller) FindById(id string)  entity.Video{
-	return c.service.FindById(id)
-}
-
-func  (c *controller) Delete(id string) {
-	 c.service.Delete(id)
+func  (c *controller) Update(ctx *gin.Context) error{
+	var video entity.Video
+	err := ctx.ShouldBindJSON(&video)
+	if err != nil{
+		return err
+	}
+	id, err := strconv.ParseUint(ctx.Param("id"),0,0)
+	video.ID = id
+	c.service.Update(video)
+	return nil
 }

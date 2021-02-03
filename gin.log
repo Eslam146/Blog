@@ -3,13 +3,9 @@
  - using code:	gin.SetMode(gin.ReleaseMode)
 
 [GIN-debug] GET    /videos                   --> main.main.func1 (4 handlers)
-[GIN-debug] GET    /author/:autherName       --> main.main.func2 (4 handlers)
-[GIN-debug] GET    /videos/:id               --> main.main.func3 (4 handlers)
-[GIN-debug] POST   /videos                   --> main.main.func4 (4 handlers)
-[GIN-debug] DELETE /videos/:id               --> main.main.func5 (4 handlers)
+[GIN-debug] POST   /videos                   --> main.main.func2 (4 handlers)
+[GIN-debug] POST   /videos/:id               --> main.main.func3 (4 handlers)
+[GIN-debug] PUT    /videos/:id               --> main.main.func4 (4 handlers)
 [GIN-debug] Listening and serving HTTP on :8080
-::1 - [02 Feb 21 14:02 EET] GET /videos 401 8.067µs 
-::1 - [02 Feb 21 14:02 EET] GET /videos 401 3.164µs 
-::1 - [02 Feb 21 14:02 EET] GET /videos 200 74.043µs 
-::1 - [02 Feb 21 14:02 EET] GET /videos 200 16.304µs 
-::1 - [02 Feb 21 14:02 EET] POST /videos 401 3.696µs 
+::1 - [03 Feb 21 10:07 EET] GET /videos 200 274.619µs 
+::1 - [03 Feb 21 10:07 EET] POST /videos/5 400 23.467µs 

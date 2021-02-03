@@ -4,6 +4,7 @@ package main
 import (
 	"./controller"
 	"./middlewares"
+	"./repository"
 	"./service"
 	"github.com/gin-gonic/gin"
 	"io"
@@ -11,7 +12,8 @@ import (
 	"os"
 )
 var(
-	videoService service.VideoService = service.New()
+	videoRepository repository.VideoRepository = repository.NewVideoRepository()
+	videoService service.VideoService = service.New(videoRepository)
 	videoController controller.VideoController = controller.New(videoService)
 )
 
@@ -29,15 +31,7 @@ func main() {
 		ctx.JSON(200,videoController.FindAll())
 	})
 
-	router.GET("/author/:autherName", func(ctx *gin.Context) {
-		autherName := ctx.Param("autherName")
-		ctx.JSON(http.StatusOK, videoController.FindByAuthor(autherName) )
-	})
 
-	router.GET("/videos/:id", func(ctx *gin.Context) {
-		id := ctx.Param("id")
-		ctx.JSON(http.StatusOK, videoController.FindById(id) )
-	})
 
 	router.POST("/videos", func(ctx *gin.Context) {
 		err := videoController.Save(ctx)
@@ -49,10 +43,21 @@ func main() {
 	})
 
 	router.DELETE("/videos/:id" , func(ctx *gin.Context) {
-		id := ctx.Param("id")
-		videoController.Delete(id)
-		ctx.JSON(http.StatusOK , "item has been removed")
+		err := videoController.Delete(ctx)
+		if err != nil{
+			ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		}else{
+			ctx.JSON(http.StatusOK, gin.H{"message": "Delete success!"})
+		}
 	})
 
+	router.PUT("/videos/:id" , func(ctx *gin.Context) {
+		err := videoController.Update(ctx)
+		if err != nil{
+			ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		}else{
+			ctx.JSON(http.StatusOK, gin.H{"message": "Update Success"})
+		}
+	})
 	router.Run(":8080")
 }
